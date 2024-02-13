@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+    <title>01 - custom elements</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+<body>
+<h1>02 - Shadow DOM</h1>
+<p>
+    In this second exercise, I'll start using the <code>attachShadow()</code> function to use the
+    <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM"
+       target="_blank">
+        shadow DOM
+    </a>.
+</p>
+<p>
+    I learned a bit about the <code>mode</code> parameter, and it seems that it's a good practice to use
+    <code>open</code> to allow the shadow DOM to be manipulated by the outside world. I wonder why
+    someone would want to use <code>closed</code> mode.
+</p>
+<my-element></my-element>
+
+<script type="text/javascript">
+    class MyElement extends HTMLElement {
+        constructor() {
+            super()
+            this.attachShadow({mode: 'open'}) // <- there we go with the shadow DOM
+            this.shadowRoot.innerHTML = '<p>BAM! I\'m a custom element!</p>'
+        }
+    }
+
+    customElements.define('my-element', MyElement)
+</script>
+</body>
+</html>
