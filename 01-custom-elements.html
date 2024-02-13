@@ -1,0 +1,28 @@
+<html>
+<head>
+    <title>01 - custom elements</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script type="module"> // <-- it's a module, so it's loaded after the page is parsed
+        class MyElement extends HTMLElement {
+            constructor() {
+                super()
+                // without the "module" attribute, this would trigger an error!
+                this.innerHTML = 'BAM! I\'m a custom element!'
+            }
+        }
+        customElements.define('my-element', MyElement)
+    </script>
+</head>
+<body>
+<h1>01 - Custom elements</h1>
+<p>
+    In this example, we will create a custom element called <code>my-element</code>.
+    It turned out to be more difficult than expected, because I didn't know that WebC need to
+    be loaded after the body is parsed to be able to update the DOM through <code>innerHTML</code>.
+</p>
+<my-element></my-element>
+</body>
+</html>
