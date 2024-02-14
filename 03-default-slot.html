@@ -1,0 +1,36 @@
+<html lang="en">
+<head>
+    <title>03 - default slot</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+<body>
+<h1>03 - Default slot</h1>
+<p>
+    Here we try to go with the basic of slots composition. We'll just use the default slot to render a string inside
+    the components.
+</p>
+<p>
+    I wonder if the <code>&lt;slot&gt;</code> tag is related only to shadow DOM, or if it has some other use cases.
+</p>
+<div class="result">
+    <my-element>Test</my-element>
+    <my-element>Test 2</my-element>
+    <my-element></my-element> <!-- works also with empty slots -->
+</div>
+
+<script type="text/javascript">
+    class MyElement extends HTMLElement {
+        constructor() {
+            super()
+            this.attachShadow({mode: 'open'}) // <- there we go with the shadow DOM
+            this.shadowRoot.innerHTML = '<p>This component is called with <slot></slot></p>'
+        }
+    }
+
+    customElements.define('my-element', MyElement)
+</script>
+</body>
+</html>
