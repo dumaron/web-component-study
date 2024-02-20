@@ -3,3 +3,7 @@
     padding: 10px;
     background-color: #f4f4f4;
 }
+
+code {
+    font-family: 'Berkeley Mono Variable', 'Berkeley Mono', 'JetBrains Mono', monospace;
+}

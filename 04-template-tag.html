@@ -1,0 +1,51 @@
+<html lang="en">
+<head>
+    <title>04 - template tag</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+<body>
+<h1>04 - <code>template</code> tag</h1>
+<p>
+    Now we use the <code>template</code> tag to define the content of the shadow DOM. This way, we can avoid the
+    <code>innerHTML</code> property and have a more declarative approach. It works with slots too!
+</p>
+<section class="notes">
+    <p>
+        I don't like what Rob did with the <code>static</code> method in his class. I think it's a bad practice to
+        mutate a static method.
+    </p>
+</section>
+<template id="my-template">
+    <h2>Hi from a template!</h2>
+    <p>Here's your slot:
+        <slot></slot>
+    </p>
+</template>
+
+<div class="result">
+    <my-element>Test</my-element>
+    <my-element><code>Test 2</code></my-element>
+</div>
+
+<script type="module">
+    class MyElement extends HTMLElement {
+        constructor() {
+            super()
+            this.attachShadow({mode: 'open'})
+            this.shadowRoot.appendChild(this.cloneTemplate())
+        }
+
+        cloneTemplate = () => {
+            const template = document.getElementById('my-template')
+            const importedNode = document.adoptNode(template.content)
+            return importedNode.cloneNode(true)
+        }
+    }
+
+    customElements.define('my-element', MyElement)
+</script>
+</body>
+</html>

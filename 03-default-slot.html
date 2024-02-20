@@ -17,7 +17,7 @@
 </p>
 <div class="result">
     <my-element>Test</my-element>
-    <my-element>Test 2</my-element>
+    <my-element><code>Test 2</code></my-element>
     <my-element></my-element> <!-- works also with empty slots -->
 </div>
 
@@ -25,7 +25,7 @@
     class MyElement extends HTMLElement {
         constructor() {
             super()
-            this.attachShadow({mode: 'open'}) // <- there we go with the shadow DOM
+            this.attachShadow({mode: 'open'})
             this.shadowRoot.innerHTML = '<p>This component is called with <slot></slot></p>'
         }
     }
