@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+    <title>05 - connected callback</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+<body>
+<h1>05 - <code>connectedCallback</code></h1>
+<p>
+    Here we use the <code>connectedCallback</code> lifecycle method. In the first component I just performend a
+    <code>console.log</code> statement, but in the second one I used the <code>connectedCallback</code> to append the
+    template to the shadow DOM. This way, the template is only appended when the component is rendered.
+</p>
+
+<template id="my-template">
+    <p>This is a custom component</p>
+</template>
+
+<div class="result">
+    <my-element></my-element>
+    <my-element-2></my-element-2>
+</div>
+
+<script type="module">
+    class MyElement extends HTMLElement {
+        constructor() {
+            super()
+            this.attachShadow({mode: 'open'})
+            this.shadowRoot.appendChild(this.cloneTemplate())
+        }
+
+        cloneTemplate = () => {
+            const template = document.getElementById('my-template')
+            const importedNode = document.adoptNode(template.content)
+            return importedNode.cloneNode(true)
+        }
+
+        connectedCallback() {
+            console.log('connected!')
+        }
+    }
+
+    class MyElement2 extends HTMLElement {
+        constructor() {
+            super()
+            this.attachShadow({mode: 'open'}) // <- does this really need to be here?
+        }
+
+        cloneTemplate = () => {
+            const template = document.getElementById('my-template')
+            const importedNode = document.adoptNode(template.content)
+            return importedNode.cloneNode(true)
+        }
+
+        connectedCallback() {
+            this.shadowRoot.appendChild(this.cloneTemplate()) // <- it runs only if and when the component is rendered
+        }
+    }
+
+    customElements.define('my-element', MyElement)
+    customElements.define('my-element-2', MyElement2)
+</script>
+</body>
+</html>
