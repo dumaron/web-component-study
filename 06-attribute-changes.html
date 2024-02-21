@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+    <title>06 - attributes changes</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+<body>
+<h1>06 - Attributes changes</h1>
+<p>
+    Here we use the <code>connectedCallback</code> lifecycle method. In the first component I just performend a
+    <code>console.log</code> statement, but in the second one I used the <code>connectedCallback</code> to append the
+    template to the shadow DOM. This way, the template is only appended when the component is rendered.
+</p>
+
+<template id="my-template">
+    <p><span id="greeting"></span> <slot></slot>!</p>
+</template>
+
+<div class="result">
+    <input type="text" id="greeting" placeholder="Type a greeting here">
+    <button id="change-greeting">Change greeting</button>
+    <my-element greeting="Hi">Joanna</my-element>
+</div>
+
+<script type="module">
+
+    document.querySelector('#change-greeting').addEventListener('click', () => {
+        const greeting = document.querySelector('#greeting').value
+        document.querySelector('my-element').setAttribute('greeting', greeting)
+    })
+
+    class MyElement extends HTMLElement {
+        static observedAttributes = ['greeting'] // <- needed to observe the attribute
+
+        constructor() {
+            super()
+            this.attachShadow({mode: 'open'})
+        }
+
+        #cloneTemplate = () => {
+            const template = document.getElementById('my-template')
+            const importedNode = document.adoptNode(template.content)
+            return importedNode.cloneNode(true)
+        }
+
+        #updateGreeting = () => {
+            const container = this.shadowRoot.querySelector('#greeting')
+            if (container === null) return
+
+            const g = this.getAttribute('greeting')
+            container.textContent = g === null || g === ''
+                ? 'Hello'
+                : g
+
+        }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+            console.log(`Attribute ${name} changed from ${oldValue} to ${newValue}`)
+            if (name === 'greeting') this.#updateGreeting()
+        }
+
+        connectedCallback() {
+            this.shadowRoot.appendChild(this.#cloneTemplate())
+            this.#updateGreeting() // <- needed because the `attributeChangedCallback` runs before `connectedCallback`
+                                   //    and then never again if the attribute is not changed
+        }
+    }
+
+    customElements.define('my-element', MyElement)
+</script>
+</body>
+</html>
