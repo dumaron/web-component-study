@@ -8,9 +8,12 @@
 <body>
 <h1>06 - Attributes changes</h1>
 <p>
-    Here we use the <code>connectedCallback</code> lifecycle method. In the first component I just performend a
-    <code>console.log</code> statement, but in the second one I used the <code>connectedCallback</code> to append the
-    template to the shadow DOM. This way, the template is only appended when the component is rendered.
+    With WebC it's possible to set up listeners for attribute changes, and it seems to me it could be a good way to
+    achieve basic reactivity. It's possible to connect to those listeners through the <code>attributeChangedCallback</code>.
+</p>
+<p>
+    Another interesting fact is that ids are scoped in the shadow DOM, so it's possible to use the same id in different
+    components - or in an component and the main page - without any conflict. Webstorm is not smart enough to figure it.
 </p>
 
 <template id="my-template">

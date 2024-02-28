@@ -1,0 +1,59 @@
+<html lang="en">
+<head>
+    <title>07 - Basic styling</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+<body>
+<h1>07 - Basic styling</h1>
+<p>
+    Just some basic styling to the component. On this lesson there are only a couple of new things:
+    <ul>
+        <li>using the <code>:host</code> pseudo-class to style the component itself;</li>
+        <li>defining a CSS variable inside a <code>style</code> inline attribute.</li>
+    </ul>
+    However, I suspect the last point has nothing to do with WebC.
+</p>
+
+<template id="my-template">
+    <style>
+        :host {
+            --color: blue;
+        }
+
+        p {
+            color: var(--color);
+        }
+    </style>
+    <p>This is a test with <slot></slot>!</p>
+</template>
+
+<div class="result">
+    <my-element>Joanna</my-element>
+    <my-element style="--color: red">Joanna</my-element>
+</div>
+
+<script type="module">
+    class MyElement extends HTMLElement {
+
+        constructor() {
+            super()
+            this.attachShadow({mode: 'open'})
+        }
+
+        #cloneTemplate = () => {
+            const template = document.getElementById('my-template')
+            const importedNode = document.adoptNode(template.content)
+            return importedNode.cloneNode(true)
+        }
+
+        connectedCallback() {
+            this.shadowRoot.appendChild(this.#cloneTemplate())
+        }
+    }
+
+    customElements.define('my-element', MyElement)
+</script>
+</body>
+</html>
